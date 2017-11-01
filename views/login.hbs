@@ -1,0 +1,33 @@
+{{> loginHeader }}
+
+<div class='container'>
+<h1>{{title}}</h1>
+
+{{#if errors}}
+	{{#each errors}}
+		<div class="alert alert-danger">
+			{{this.msg}}
+		</div>
+	{{/each}}
+{{/if}}
+
+{{#if userError}}
+	<div class="alert alert-danger">
+		{{userError}}
+	</div>
+{{/if}}
+
+<form method="POST" action="/login">
+	<div class="form-group">
+		<label for="username">Username</label>
+		<input type="text" name="username" class="form-control" placeholder="Username" required>
+
+		<label for="password">Password</label>
+		<input type="text" name="password" class="form-control" placeholder="Password" required>
+
+		<button type="submit" class="btn-btn_primary">Submit</button>
+  	</div>
+</form>
+
+{{> footer-end }}
+</div>

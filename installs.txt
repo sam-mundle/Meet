@@ -1,0 +1,16 @@
+install node.js
+make sure that npm commands are included in PATH
+
+npm install nodemon -g
+npm install webpack -g
+
+make sure these two commands are included in PATH
+
+npm install mysql
+npm install express
+npm install handlebars
+npm install express-session
+npm install express-mysql-session --save
+a
+
+Uses bootstrap to make really easy HTML formatting
