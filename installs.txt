@@ -11,6 +11,8 @@ npm install express
 npm install handlebars
 npm install express-session
 npm install express-mysql-session --save
-a
+
 
 Uses bootstrap to make really easy HTML formatting
+
+-sammyswank

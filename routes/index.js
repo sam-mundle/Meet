@@ -6,22 +6,63 @@ var passport = require('passport')
 router.get('/', function(req, res, next) {
 	// Following two lines are passport functions to check if authentication is working
 	console.log(req.user);
-	console.log(req.isAuthenticated())
+	console.log(req.isAuthenticated());
+	
 	res.render('home', { title: 'Home' });
 });
 
 router.get('/profile', authenticationMiddleware(), function(req, res) {
+	console.log(req.user);
+	console.log(req.isAuthenticated());
 	res.render('profile', {title: 'Profile'})
+});
+
+router.get('/logout', function(req, res, next) {
+	req.logout()
+    req.session.destroy(() => {
+        res.clearCookie('connect.sid')
+        res.redirect('/');
+    })
+	
 });
 
 router.get('/login', function(req, res, next) {
 	res.render('login', { title: 'Login' });
 });
-router.post('/login', passport.authenticate(
-	'local', {
-		successRedirect: '/profile',
-		failureRedirect: '/login'
-}));
+
+router.post('/login', function(req, res, next) {
+
+	const username = req.body.username;
+	const password = req.body.password;
+	const db = require('../db.js');
+
+	//Question marks will protect database from malicious input values
+	db.query('SELECT password FROM users WHERE username = ?',[username], function(error, results, fields) {
+		
+		if (results.length === 0) {
+			res.render('login', { 
+				title: 'Login Failed' ,
+				userError: 'Login failed: Username/Password not found'
+			});
+		}
+		else if (password != results[0].password){
+			const passwordDB = results[0].password;
+			console.log("Found user");
+			console.log("Entered Password: " + password);
+			console.log("Database Password: " + passwordDB);
+			res.render('login', { 
+				title: 'Login Failed' ,
+				userError: 'Login failed: Incorrect Password'
+			});
+		}
+		else {
+			console.log("Login Successful!");
+			req.login(username, function(err) {
+					res.redirect('/')
+			});
+		}
+	});
+});
 
 router.get('/register', function(req, res, next) {
 	res.render('register', { title: 'Register' });
@@ -43,18 +84,15 @@ router.post('/register', function(req, res, next) {
 		});
 	}
 	else {
-
-		const firstName = req.body.firstName;
-		const lastName = req.body.lastName;
-		const username = req.body.username;
-		const email = req.body.email;
-		const password = req.body.password;
-		const userType = req.body.userType;
-
-		const db = require('../db.js');
-
+	const username = req.body.username;
+	const email = req.body.email;
+	const password = req.body.password;
+	const userType = req.body.userType;
+	const approval = 'Awaiting Approval';
+	const db = require('../db.js');
+		
 	//Question marks will protect database from malicious input values
-	db.query("INSERT INTO users (username,password,email,nameFirst,nameLast,usertype) VALUES (?,?,?,?,?,?)",[username,password,email,firstName,lastName,userType], function(
+	db.query("INSERT INTO users (username,password,email,usertype) VALUES (?,?,?,?)",[username,password,email,approval], function(
 		error, results, fields) {
 		if (error) {
 			console.log(error);
@@ -64,40 +102,108 @@ router.post('/register', function(req, res, next) {
 			});
 		}
 		else {
-			console.log('SELECT userid as user_id FROM users WHERE username=\'' + username + '\'');
-			db.query('SELECT userid as user_id FROM users WHERE username=\'' + username + '\'', function(error, results, fields) {
-				if (error) throw error;
-
-				const user_id = results[0];
-				console.log("USER ID IS");
-				console.log(user_id);
-
-				// Passes user_id from query into the passport functions below
-				req.login(user_id, function(err) {
-					res.redirect('/')
-				})
+			// Inserts user into awaitingapproval DB
+			db.query("INSERT INTO awaitingapproval (username,userType) VALUES (?,?)",[username,userType], function(
+			error, results, fields) {
+			if (error) console.log(error);
 			});
+			// Passes username from query into the passport functions below
+			req.login(username, function(err) {
+				res.redirect('/')
+			})
 		}
-
 	});
-
 }
 });
+router.get('/applicants', function(req, res, next) {
 
-passport.serializeUser(function(user_id, done) {
-  done(null, user_id);
+	const db = require('../db.js');
+	const type = 'Awaiting Approval';
+	var approvalIsEmpty;
+	db.query('SELECT * FROM users WHERE usertype = ?',[type], function(error, results, fields) {
+		if (results.length === 0) {
+			console.log('no users For Approval');
+			approvalIsEmpty = true;
+			res.render('applicants', { 
+					title: 'Application Approval' ,
+					isEmpty: approvalIsEmpty
+			});
+		}
+		else {
+			console.log('Some users need Approval');
+			approvalIsEmpty = false;
+			res.render('applicants', { 
+					title: 'Application Approval' ,
+					isEmpty: approvalIsEmpty,
+					users: results
+			});
+		}
+		
+	});
+	
 });
 
-passport.deserializeUser(function(user_id, done) {
-    done(null, user_id);
+router.post('/applicants', function(req, res, next) {
+
+	const approveDeny = req.body.acceptDeny;
+	const usersChecked = req.body.usersCheck;
+	const numUsersChecked = usersChecked.length;
+	var messages = req.body.reasonMessage;
+	for (i=0;i<messages.length;i++){
+		if (messages[i]=='')
+			messages[i]='dummy fill';
+	}
+	console.log("What is their FATE?? " + approveDeny);
+	console.log("Users checked: " + usersChecked + " Totaling " + numUsersChecked);
+	console.log("Messages: " + messages);
+	
+
+	const db = require('../db.js');
+
+	res.render('splashTemp', { 
+			title: 'Splash'
+	});
+	//Question marks will protect database from malicious input values
+	// db.query('SELECT password FROM users WHERE username = ?',[username], function(error, results, fields) {
+		
+	// 	if (results.length === 0) {
+	// 		res.render('login', { 
+	// 			title: 'Login Failed' ,
+	// 			userError: 'Login failed: Username/Password not found'
+	// 		});
+	// 	}
+	// 	else if (password != results[0].password){
+	// 		const passwordDB = results[0].password;
+	// 		console.log("Found user");
+	// 		console.log("Entered Password: " + password);
+	// 		console.log("Database Password: " + passwordDB);
+	// 		res.render('login', { 
+	// 			title: 'Login Failed' ,
+	// 			userError: 'Login failed: Incorrect Password'
+	// 		});
+	// 	}
+	// 	else {
+	// 		console.log("Login Successful!");
+	// 		req.login(username, function(err) {
+	// 				res.redirect('/')
+	// 		});
+	// 	}
+	// });
+});
+passport.serializeUser(function(username, done) {
+	done(null, username);
+});
+
+passport.deserializeUser(function(username, done) {
+	done(null, username);
 });
 
 function authenticationMiddleware () {  
 	return (req, res, next) => {
 		console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
 
-	    if (req.isAuthenticated()) return next();
-	    res.redirect('/login')
+		if (req.isAuthenticated()) return next();
+		res.redirect('/login')
 	}
 }
 

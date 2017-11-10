@@ -1,4 +1,4 @@
-{{> loginHeader }}
+{{> header }}
 
 <div class='container'>
 <h1>{{title}}</h1>
@@ -19,12 +19,7 @@
 
 <form method="POST" action="/register">
 	<div class="form-group">
-		<label for="firstName">First Name</label>
-		<input type="text" name="firstName" class="form-control" placeholder="First Name" required>
-
-		<label for="lastName">Last Name</label>
-		<input type="text" name="lastName" class="form-control" placeholder="Last Name" required>
-
+		
 		<label for="username">Username</label>
 		<input type="text" name="username" class="form-control" placeholder="Username" required>
 
@@ -47,5 +42,4 @@
   	</div>
 </form>
 
-{{> footer-end }}
 </div>

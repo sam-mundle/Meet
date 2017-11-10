@@ -49,16 +49,31 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(function(req, res, next) {
+  res.locals.isAuthenticated = req.isAuthenticated();
+  next();
+});
+app.use(function(req, res, next) {
+  res.locals.userName = req.user
+  next();
+});
+app.use(function(req, res, next) {
+  const db = require('./db.js');
+  db.query('SELECT usertype FROM users WHERE username = ?',[req.user], function(error, results, fields) {
+    if (results.length === 0) {
+      console.log("could not retrieve usertype");
+      next();
+    }
+    else {
+      res.locals.userType = results[0].usertype;
+      next();
+    }
+  });
+  
+});
 app.use('/', index);
 app.use('/users', users);
 
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-      console.log(username);
-      console.log(password);
-      return done(null, user);
-  }
-));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -82,6 +97,15 @@ app.use(function(err, req, res, next) {
 // Handlebars default config
 const hbs = require('hbs');
 const fs = require('fs');
+hbs.registerHelper('equal', function(lvalue, rvalue, options) {
+    if (arguments.length < 3)
+        throw new Error("Handlebars Helper equal needs 2 parameters");
+    if( lvalue!=rvalue ) {
+        return options.inverse(this);
+    } else {
+        return options.fn(this);
+    }
+});
 
 const partialsDir = __dirname + '/views/partials';
 

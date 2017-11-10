@@ -1,0 +1,8 @@
+- Output list of applicants
+- Create checkable boxes for applicants
+- Create buttons for accepting and denying
+- Buld backend SQL Post points for accepting/denying (modify user table)
+  - Remove username from awaitingapproval table
+- Make DB table for first login message (username,loginMessage)
+  - Accept gives template welcome
+  - Deny reqiures personal message

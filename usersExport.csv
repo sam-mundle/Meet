@@ -1,0 +1,6 @@
+"userid";"username";"password";"email";"nameFirst";"nameLast";"usertype";"totalBal";"liquidBal";"isApproved";"isBlacklisted";"rating";"numRatings"
+1;"sammyswank";"password13";"s@gmail.com";"sam";"mundle";"Developer";0;"";0;0;0.0;0.0
+2;"boydi";"ssame";"55@gmail.com";"ucha";"dude";"Developer";0;"";0;0;0.0;0.0
+3;"banks";"password";"pass@gm.com";"sam";"mundle";"Developer";0;"";0;0;0.0;0.0
+16;"fredDurst";"password";"d@gm.com";"fred";"durst";"Developer";0;"0";0;0;0.0;0.0
+17;"reBOOM";"password";"s@g.com";"Boom";"Boom";"Client";0;"0";0;0;0.0;0.0
