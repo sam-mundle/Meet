@@ -1,6 +1,11 @@
 install node.js
 make sure that npm commands are included in PATH
 
+read about what npm is (node package manager)
+
+The following two packages allow for automatic updating
+of your site/server so you don't have to restart everytime
+
 npm install nodemon -g
 npm install webpack -g
 
@@ -13,6 +18,6 @@ npm install express-session
 npm install express-mysql-session --save
 
 
-Uses bootstrap to make really easy HTML formatting
+Learn bootstrap to make really easy HTML formatting
 
--sammyswank
+-Swank out
