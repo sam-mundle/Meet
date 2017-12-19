@@ -1,0 +1,46 @@
+{{> header }}
+
+<div class='container'>
+<h1>{{title}}</h1>
+
+{{#if errors}}
+	{{#each errors}}
+		<div class="alert alert-danger">
+			{{this.msg}}
+		</div>
+	{{/each}}
+{{/if}}
+
+{{#if userError}}
+	<div class="alert alert-danger">
+		{{userError}}
+	</div>
+{{/if}}
+
+<form method="POST" action="/newproject" id="form">
+	<div class="form-group">
+		
+		<label for="projectname">Project Name</label>
+		<input type="text" name="projectname" class="form-control" placeholder="Project Name" required>
+		<p></p>
+		<label for="projDesc">Project Description</label>
+		<textarea class="form-control" rows="5" name="projDesc" id="projDesc" placeholder="Enter a project description"></textarea>
+		<p></p>
+		<p></p>
+		<label for="enddate">End date/time</label>
+    	<input type="datetime-local" name="enddate">
+    	<p></p>
+
+		<button type="submit" class="btn-btn_primary">Submit</button>
+  	</div>
+</form>
+
+</div>
+<footer class="footer">
+        <p>&copy; _Meet 2017</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+</body>
+</html>

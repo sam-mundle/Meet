@@ -1,0 +1,39 @@
+{{> header }}
+<h1>{{title}}</h1>
+{{#if userError}}
+  <div class="alert alert-danger">
+    {{userError}}
+  </div>
+{{/if}}
+
+
+<a href="/writemessage">Compose a Message!</a>
+
+
+{{#if messages}}
+  {{#each messages}}
+    <div class="row marketing">
+    <div class="col-lg-6">
+
+    <p><b>Sender: {{this.sender}}</b></p>
+    <p>{{this.message}}</p>
+
+      <form method="POST" action="/deletemessage">
+      <div class="form-group">
+        <textarea class="text" id = "messageid" name = "messageid" style="display:none">{{this.id}}</textarea>
+        <input type="submit" value="Delete"/>
+      </div>
+      </form>
+    </div>
+    </div>
+  {{/each}}
+{{/if}}
+
+</div>
+
+
+
+{{> footer }}
+</div> <!-- /container -->
+</body>
+</html>

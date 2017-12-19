@@ -1,0 +1,23 @@
+{{> header }}
+
+<h1>Bids for {{title}}</h1>
+
+		{{#if bids}}
+		<div class="row marketing">
+	        <div class="col-lg-4">
+			<form method="POST" action="/developerchoice">
+			<div class="form-group">
+				<label for="project">Choose a developer for the project</label>
+				<select name="developerandbid" class="form-control">
+					{{#each bids}}
+					<option value="{{this.name}}*^*{{this.bid}}">{{this.name}} - ${{this.bid}}</option>
+					{{/each}}
+				<textarea class="text" id = "project" name = "project" style="display:none">{{title}}</textarea>
+				<input type="submit" value="Select"/>
+				</select>
+			</div>
+			</div>
+		</div>
+		{{else}}
+			<p> Sorry no bids yet! Check back later</p>
+		{{/if}}

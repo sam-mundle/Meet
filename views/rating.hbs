@@ -1,0 +1,36 @@
+{{> header }}
+
+<h1>{{title}}</h1>
+
+{{#if errors}}
+	{{#each errors}}
+		<div class="alert alert-danger">
+			{{this.msg}}
+		</div>
+	{{/each}}
+{{/if}}
+
+{{#if userError}}
+	<div class="alert alert-danger">
+		{{userError}}
+	</div>
+{{/if}}
+
+<form method="POST" action="/rating">
+	<div class="form-group">
+		<textarea class="text" id = "userbeingrated" name = "userbeingrated" style="display:none">{{userbeingrated}}</textarea>
+		<textarea class="text" id = "projname" name = "projname" style="display:none">{{projname}}</textarea>
+
+		<input type="radio" name="rating" value="1"> 1<br>
+		<input type="radio" name="rating" value="2"> 2<br>
+		<input type="radio" name="rating" value="3" checked> 3<br>
+		<input type="radio" name="rating" value="4"> 4<br>
+		<input type="radio" name="rating" value="5"> 5<br>
+		<label for="message">Rate this project</label>
+		<textarea class="form-control" id = "message" name = "message"></textarea>
+		<button type="submit" class="btn-btn_primary">Submit</button>
+  	</div>
+</form>
+
+{{> footer }}
+</div>

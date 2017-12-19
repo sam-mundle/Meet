@@ -1,0 +1,26 @@
+{{> header }}
+
+
+<h1>{{title}}</h1>
+
+{{#if userError}}
+  <div class="alert alert-danger">
+    {{userError}}
+  </div>
+{{/if}}
+
+<form method="POST" action="/writemessage">
+	<div class="form-group">
+		
+		<label for="recipient">Message Recipient</label>
+		<input type="text" name="recipient" class="form-control" placeholder="Recipient" required>
+		<p></p>
+		<label for="message">Message</label>
+		<textarea id = "message" name = "message" class="form-control"  placeholder="Enter message"></textarea>
+
+
+		<button type="submit" class="btn-btn_primary">Submit</button>
+  	</div>
+</form>
+
+</div>

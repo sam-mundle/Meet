@@ -1,0 +1,48 @@
+{{> header }}
+<h1>{{title}}</h1>
+{{#if userError}}
+  <div class="alert alert-danger">
+    {{userError}}
+  </div>
+{{/if}}
+
+
+
+
+
+{{#if projects}}
+  {{#each projects}}
+    <div class="row marketing">
+    <div class="col-lg-6">
+    <h4>{{this.name}}</h4>
+    <p>Client: {{this.client}}</p>
+    <p>{{this.desc}}</p>
+    <!-- <p>Lowest Bid: {{this.lowestbid}}</p> -->
+    <p>End date/time: {{this.datetime}}</p>
+    </div>
+    <div class="col-lg-2">
+    {{#equal this.usertype 'Developer' }}
+    <p></p>
+    
+      <form method="POST" action="/marketplace">
+      <div class="form-group">
+        <label for="bid">Place bid: </label>
+        <input type="number" name="bid" id= "bid" class="form-control" placeholder="0" required>
+        <textarea class="text" id = "project" name = "project" style="display:none">{{this.name}}</textarea>
+        <input type="submit" value="submit"/>
+      </div>
+      </form>
+    {{/equal}}
+    </div>
+    </div>
+  {{/each}}
+{{/if}}
+
+</div>
+
+
+
+{{> footer }}
+</div> <!-- /container -->
+</body>
+</html>

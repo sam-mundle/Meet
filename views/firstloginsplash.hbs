@@ -1,0 +1,28 @@
+{{> header }}
+
+{{#equal decision 'Accept'}}
+<h1>Congratulations {{user}}, you have been accepted! Welcome to _Meet</h1>
+{{/equal}}
+{{#equal decision 'Deny'}}
+<h1>Sorry {{user}}, you have been denied</h1>
+{{/equal}}
+
+<p>{{message}}</p>
+
+
+<form method="POST" action="/firstlogin">
+  <div class="form-group">
+    <textarea class="text" id = "user" name = "user" style="display:none">{{user}}</textarea>
+    <textarea class="text" id = "decision" name = "decision" style="display:none">{{decision}}</textarea>
+    <input type="submit" value="Continue"/>
+  </div>
+</form>
+
+<footer class="footer">
+	<p>&copy; _Meet 2017</p>
+</footer>
+
+    </div> <!-- /container -->
+
+</body>
+</html>

@@ -1,2 +1,120 @@
 {{> header }}
-      <h2>PROFILE</h2>
+<h1>{{title}}</h1>
+
+{{#if userError}}
+  <div class="alert alert-danger">
+    {{userError}}
+  </div>
+{{/if}}
+<p></p>
+{{#if userinfo}}
+{{#each userinfo}}
+	<p>Full name: {{this.firstname}} {{this.lastname}}</p>
+	<p>Email: {{this.email}}</p>
+	<p>Github URL: {{this.github}}</p>
+{{/each}}
+{{/if}}
+<a href="/updateinfo">Update information</a>
+<h4>Account Balance</h4>
+<div class="row marketing">
+
+	<div class="col-lg-3">
+	<p>Current liquid account balance: ${{funds}}</p>
+	<form method="POST" action="/profiledeposit">
+	      <div class="form-group">
+	        <label for="bid">Deposit money to your account</label>
+	        <input type="number" name="deposit" id= "deposit" class="form-control" placeholder="$" required>
+	        <textarea class="text" id = "money" name = "money" style="display:none">{{funds}}</textarea>
+	        <input type="submit" value="Deposit"/>
+	      </div>
+	</form>
+	</div>
+</div>
+
+	{{#equal userType 'Client' }}
+	
+		{{#if projects}}
+		<p></p>
+		<h4>Choose Developers For Your Projects</h4>
+		<div class="row marketing">
+	        <div class="col-lg-4">
+			<form method="POST" action="/profileproject">
+			<div class="form-group">
+				<label for="project">Select a project to view its list of bidders</label>
+				<select name="project" class="form-control">
+					{{#each projects}}
+					<option value="{{this.name}}">{{this.name}}</option>
+					{{/each}}
+				<input type="submit" value="Select"/>
+				</select>
+			</div>
+			</form>
+			</div>
+		</div>
+		{{/if}}
+
+		{{#if projClient}}
+		<p></p>
+		<h4>Completed projects</h4>
+		<div class="row marketing">
+	        <div class="col-lg-4">
+			<form method="POST" action="/pushtorating">
+			<div class="form-group">
+				<label for="project">Choose a Developer to rate</label>
+				<select name="project" class="form-control">
+					{{#each projClient}}
+					<option value="{{this.projname}}">{{this.projname}}</option>
+					{{/each}}
+				<input type="submit" value="Select"/>
+				</select>
+			</div>
+			</form>
+			</div>
+		</div>
+		{{/if}}
+	{{/equal}}
+
+	{{#equal userType 'Developer'}}
+	<h4>Current Projects in Development</h4>
+		{{#if projDev}}
+			{{#each projDev}}
+			<div class="row marketing">
+	        <div class="col-lg-8">
+			<form method="POST" action="/projComplete">
+			<div class="form-group">
+				<label for="submit">{{this.projname}} (Deadline: {{this.date}})</label>
+				<textarea class="textbox" id ="client" name ="client" style="display:none">{{this.client}}</textarea>
+				<textarea class="textbox" id ="proj" name ="proj" style="display:none">{{this.projname}}</textarea>
+				<input type="submit" name = "submit" value="Submit Project"/>
+			</div>
+			</form>
+			{{/each}}
+
+		{{else}}
+		<p>No current Projects</p>
+		{{/if}}
+	{{/equal}}
+
+	{{#equal userType 'superuser'}}
+		<h4>Projects with poor Developer Rating. Please review</h4>
+		{{#if projreview}}
+			{{#each projreview}}
+			<div class="row marketing">
+	        <div class="col-lg-8">
+			<form method="POST" action="/projreview">
+			<div class="form-group">
+				<textarea class="text" id = "project" name = "project" style="display:none">{{this.projname}}</textarea>
+				<textarea class="text" id = "client" name = "client" style="display:none">{{this.client}}</textarea>
+				<textarea class="text" id = "developer" name = "developer" style="display:none">{{this.developer}}</textarea>
+				<label for="submit">{{this.projname}}</label>
+				<input type="submit" name = "decision" value ="Accept"/>
+				<input type="submit" name = "decision" value="Deny"/>
+			</div>
+			</form>
+			{{/each}}
+
+		{{else}}
+		<p>No current projects with poorly rated developers</p>
+		{{/if}}
+	{{/equal}}
+</div>

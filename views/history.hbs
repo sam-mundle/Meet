@@ -1,0 +1,61 @@
+{{> header }}
+
+
+<h1>{{title}}</h1>
+
+{{#if errors}}
+	{{#each errors}}
+		<div class="alert alert-danger">
+			{{this.msg}}
+		</div>
+	{{/each}}
+{{/if}}
+
+{{#if userError}}
+	<div class="alert alert-danger">
+		{{userError}}
+	</div>
+{{/if}}
+
+<form method="POST" action="/searchhistory">
+
+	<div class="input-group">
+		<input type="text" name="query" class="form-control" placeholder="Search projects or users">
+		<span class="input-group-btn">
+			<button type="submit" name="searchtype" value="users" class="btn btn-default">Users</button>
+		</span>
+		<span class="input-group-btn">
+			<button type="submit" name="searchtype" value="projectname" class="btn btn-default"">Projects</button>
+		</span>
+  	</div>
+</form>
+<p></p>
+
+{{#if searchresults}}
+	{{#each searchresults}}
+		<div class="row marketing">
+		<div class="col-lg-6">
+		    <h4>{{this.projname}}</h4>
+		    <p>Client: {{this.client}}</p>
+		    <p>Developer: {{this.developer}}</p>
+		    <p>Status: {{this.status}}</p>
+		    <p></p>
+		</div>
+	    </div>
+	{{/each}}
+{{else}}
+	{{#each fullresults}}
+		<div class="row marketing">
+		<div class="col-lg-6">
+		    <h4>{{this.projname}}</h4>
+		    <p>Client: {{this.client}}</p>
+		    <p>Developer: {{this.developer}}</p>
+		    <p>Status: {{this.status}}</p>
+		    <p></p>
+		</div>
+	    </div>
+	{{/each}}
+{{/if}}
+
+{{> footer }}
+</div>
